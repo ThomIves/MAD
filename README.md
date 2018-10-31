@@ -2,11 +2,11 @@
 
 # MAD
 > "Model and Dependencies" - capture machine learning settings and dependencies
-================================================================================================
+
 I love doing machine learning competitions, but I get "MAD" at myself when I let my model settings and results mixed up. I try hard to avoid this, but it still happens, because I can be an idiot. This python module is a way to avoid these (my) issues. Another script is forthcoming that can prepend competition results to the log file names created by this script. 
 
 ## Installing / Getting started
-================================================================================================
+
 Clone or download this to a directory of your choosing. Play with it from what I have provided and make it your own from there. 
 
 To run everything as written, you will need (as one of the log files states):
@@ -31,19 +31,19 @@ You will find for your logging pleasure (until you butcher it and make it your o
   3) model_logs - a directory holding two complete log files as examples. 
 
 ## Deploying / Publishing
-================================================================================================
+
 I would appreciate it, as you share your work leveraged from this set of scripts, if you would please keep a referral back to my github repo. Thanks! I'd do the same for you. :-)
 
 ## Contributing
-================================================================================================
+
 I am open to share the development and improvements of this with others, but it has been solo up until now. Let me know if you'd like to contribute. 
 
 ## Links
-================================================================================================
+
 This work came from https://github.com/ThomIves/MAD originally. 
 
 ## Licensing
-================================================================================================
+
 "The code in this project is licensed under MIT license."
 
 
