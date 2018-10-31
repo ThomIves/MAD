@@ -3,7 +3,7 @@
 # MAD
 > "Model and Dependencies" - capture machine learning settings and dependencies
 
-I love doing machine learning competitions, but I get "MAD" at myself when I let my model settings and results mixed up. I try hard to avoid this, but it still happens, because I can be an idiot. This python module is a way to avoid these (my) issues. Another script is forthcoming that can prepend competition results to the log file names created by this script. 
+I love doing machine learning competitions, but I get "MAD" at myself when I allow my model settings and results to get mixed up. I try hard to avoid this, but it still happens, because I can be an idiot. This python module is a way to avoid these (my) issues. Another script is forthcoming that can prepend competition results to the log file names created by this script. 
 
 ## Installing / Getting started
 
@@ -27,7 +27,7 @@ To run everything as written, you will need (as one of the log files states):
 
 You will find for your logging pleasure (until you butcher it and make it your own ... which I would do too):
   1) ToolKit.py - houses the MAD class and it's methods and is painfully documented and pep8'd to death!
-  2) MAD_Test.py - a simple machine learning file that literaly does nothing but instantiate a model from an sklearn machine learning class and then creates the magic log of everything you (in the future) or someone else wants to replicate your modeling. 
+  2) MAD_Test.py - a simple machine learning file that literally does nothing but instantiate a model from an sklearn machine learning class and then creates the magic log of everything you (in the future), or someone else who wants to replicate your modeling would need. 
   3) model_logs - a directory holding two complete log files as examples. 
 
 ## Deploying / Publishing
