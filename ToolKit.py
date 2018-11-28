@@ -56,33 +56,57 @@ class MAD:
             self.out_file.write(self.get_necessary_imports())
             self.out_file.write('\n' + '# Extra Notes:\n' + extra_notes)
 
+    def _get_model_string(self, model):
+        """Internal function that returns a string of the full model call
+
+        Arguments:
+            :param model: the instance of the model class being used
+        Returns:
+            a string of the full model call
+        """
+        model_string   = str(model).replace('\n', '').replace(' ', '')
+
+        return model_string
+        
+    def _get_model_params_array(self, model_string):
+        """docstring here
+        Arguments:
+            :param model_string: the string of the instance call of the model class
+        Returns:
+            {list} a list of the model instance parameters
+        """
+        model_name = model_string.split('(')[0]
+        model_params_array = model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
+
+        return model_params_array
+
     def get_model_info(self, mod):
         """Simple class method to return a formatted string of model information.
         
         Arguments:
-            mod {class instance} -- argument passed from __init__ method.
+            :param mod: {class instance} -- argument passed from __init__ method.
 
         Returns:
-            the model with non default parameters in use
+            {str} the model with non default parameters in use
         """
-        # get the model string and name and parameters
-        model_string   = str(mod).replace('\n', '').replace(' ', '')
-        model_name     = model_string.split()[0].split('(')[0]
-        model_params = model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
+        # get the model string and parameters
+        model_string = self._get_model_string(mod)
+        model_params = self._get_model_params_array(model_string)
         
         # get the params used in the default instance of the model
         default_imports_array  = [x for x in self._get_imports_array() if model_name in x]
         default_imports_string = "\n".join(default_imports_array)
         default_exec_command   = default_imports_string + ";" + "mod_default=" + model_name + "()"
         exec(default_exec_command, globals(), locals())
-        default_model_string = str(locals()['mod_default']).replace('\n', '').replace(' ', '')
-        default_model_params = default_model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
+        # get the default model string and parameters
+        default_model_string = self._get_model_string(locals()['mod_default'])
+        default_model_params = self._get_model_params_array(default_model_string)
 
         # get the list of non default parameters and create a model string with non default parameters
         non_default_model_params = [x for x in model_params if x not in default_model_params]
-        model_string = model_name + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
+        log_model_string = model_string.split('(')[0] + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
 
-        return '# Model and parameters:\n\t' + model_string + '\n'
+        return '# Model and parameters:\n\t' + log_model_string + '\n'
 
     def get_python_version(self):
         """Simple class method to return a string of python version information.
