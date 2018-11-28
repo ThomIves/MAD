@@ -1,9 +1,7 @@
 # Model and parameters:
 	LinearRegression(
-		copy_X=True,
-		fit_intercept=True,
-		n_jobs=None,
-		normalize=False)
+		copy_X=False
+		normalize=True)
 
 # python version:
 3.5.2 (default, Nov 23 2017, 16:37:01) 

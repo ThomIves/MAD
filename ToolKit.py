@@ -61,10 +61,26 @@ class MAD:
         
         Arguments:
             mod {class instance} -- argument passed from __init__ method.
+
+        Returns:
+            the model with non default parameters in use
         """
-        model_string = str(mod).replace('\n', '')
-        model_string = "".join(model_string.split()).replace(
-            '(', '(\n\t\t').replace(',', ',\n\t\t')
+        # get the model string and name and parameters
+        model_string   = str(mod).replace('\n', '').replace(' ', '')
+        model_name     = model_string.split()[0].split('(')[0]
+        model_params = model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
+        
+        # get the params used in the default instance of the model
+        default_imports_array  = [x for x in self._get_imports_array() if model_name in x]
+        default_imports_string = "\n".join(default_imports_array)
+        default_exec_command   = default_imports_string + ";" + "mod_default=" + model_name + "()"
+        exec(default_exec_command, globals(), locals())
+        default_model_string = str(locals()['mod_default']).replace('\n', '').replace(' ', '')
+        default_model_params = default_model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
+
+        # get the list of non default parameters and create a model string with non default parameters
+        non_default_model_params = [x for x in model_params if x not in default_model_params]
+        model_string = model_name + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
 
         return '# Model and parameters:\n\t' + model_string + '\n'
 
@@ -119,6 +135,17 @@ class MAD:
 
         return pip_rqmts
 
+    def _get_imports_array(self):
+        """Returns an array of import statements from the calling file.
+        """   
+        with open(self.calling_file, 'r') as f:
+            FLA = f.readlines()
+            imprt_lines = [line.rstrip('\n') for line in FLA if (
+                ('import ' in line) and
+                ('#' != line[0]))]
+
+        return imprt_lines
+        
     def get_necessary_imports(self):
         """Returns a formatted string of imports needed by the script 
             instantiating this class.
@@ -133,11 +160,7 @@ class MAD:
             {str} -- a formatted list of imports from the script of 
                         code block one.
         """
-        with open(self.calling_file, 'r') as f:
-            FLA = f.readlines()
-            imprt_lines = [line.rstrip('\n') for line in FLA if (
-                ('import ' in line) and
-                ('#' != line[0]))]
+        imprt_lines = self._get_imports_array()
 
         imports_string = '\n# Necessary Imports:\n'
         for line in imprt_lines:

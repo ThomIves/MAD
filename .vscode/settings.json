@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "/home/thom/.virtualenvs/py35std",
+    "python.linting.pylintEnabled": true
+    // "python.pythonPath": "/usr/bin/python3"
+}

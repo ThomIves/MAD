@@ -1,9 +1,6 @@
 # Model and parameters:
 	LinearRegression(
-		copy_X=True,
-		fit_intercept=True,
-		n_jobs=None,
-		normalize=False)
+		normalize=True)
 
 # python version:
 3.5.2 (default, Nov 23 2017, 16:37:01) 
@@ -19,8 +16,8 @@ import sklearn
 from sklearn.linear_model import LinearRegression
 import numpy as np
 import pandas as pd
-from ToolKit import Model_and_Dependencies as MAD
+from ToolKit import MAD
 
 # Extra Notes:
-These are my extra important notes.
-They even have a carriage return in them!
+These are my different extra important notes.
+These have a carriage return in them too!!!

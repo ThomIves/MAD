@@ -9,7 +9,7 @@ from ToolKit import MAD
 ###############################################################################
 ### Model info section
 
-model = LinearRegression(normalize=False)
+model = LinearRegression(normalize=True)
 
 Notes = """These are my different extra important notes.
 These have a carriage return in them too!!!"""
