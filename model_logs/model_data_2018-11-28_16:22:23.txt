@@ -1,0 +1,10 @@
+# Model and parameters:
+	LinearRegression(
+		copy_X=False
+		normalize=True)
+
+# Extra Notes:
+In this run, I decided to not log the:
+    python version, 
+    the pip requirements, and
+    the imports

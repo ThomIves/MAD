@@ -20,7 +20,8 @@ class MAD:
             such as how missing values were filled, etc.
     """
 
-    def __init__(self, mod, file_name='model_data.txt', extra_notes='', add_time_stamp=True):
+    def __init__(self, mod, 
+        file_name='model_data.txt', extra_notes='', add_time_stamp=True, **WTL):
         """Perform setups for auto documentation.
         
         The first line captures the filename of the script instantiating this class.
@@ -28,9 +29,8 @@ class MAD:
         The if block adds a time stamp to the default, or provided, file_name.
         The next if block adds a model logs directory IF it does not yet exist.
         The file open to write context manager then creates a time stamped file,
-            and adds a documentation section captured from each method.
+            if add_time_step is true, and adds a documentation section captured from each method.
 
-        
         Arguments:
             mod {class instance} --  instance of machine learning class
         
@@ -38,6 +38,9 @@ class MAD:
             file_name {str} -- the filename used for the log file (default: {'model_data.txt'})
             extra_notes {str} -- optional notes providing mode detail (default: {''})
             add_time_stamp {bool} -- boolean to add timp stamp to model file or not (default: {True})
+            WTL {kwargs} -- What To Log (WTL) are key word arguments for what to log. The default is to log everything.
+                Pass any py_version=False, pip_requirements=False, imports=False, and/or capture_notes=False to
+                    NOT log one or more of these.
         """
         self.calling_file = __main__.__file__
         self.locals = inspect.currentframe().f_back.f_locals
@@ -51,10 +54,14 @@ class MAD:
 
         with open('./model_logs/' + file_name, 'w') as self.out_file:
             self.out_file.write(self.get_model_info(mod))
-            self.out_file.write(self.get_python_version())
-            self.out_file.write(self.get_pip_requirements())
-            self.out_file.write(self.get_necessary_imports())
-            self.out_file.write('\n' + '# Extra Notes:\n' + extra_notes)
+            if (('py_version' not in WTL) or (WTL['py_version'] == True)): 
+                self.out_file.write(self.get_python_version())
+            if (('pip_requirements' not in WTL) or (WTL['pip_requirements'] == True)): 
+                self.out_file.write(self.get_pip_requirements())
+            if (('imports' not in WTL) or (WTL['imports'] == True)): 
+                self.out_file.write(self.get_necessary_imports())
+            if (('capture_notes' not in WTL) or (WTL['capture_notes'] == True)): 
+                self.out_file.write('\n' + '# Extra Notes:\n' + extra_notes)
 
     def _get_model_string(self, model):
         """Internal function that returns a string of the full model call
@@ -68,6 +75,17 @@ class MAD:
 
         return model_string
         
+    def _get_model_name(self, model_string):
+        """Internal function to get the model name
+        Arguments:
+            :param model_string: a string of the instance and model parameters
+        Returns:
+            {str} the model name
+        """
+        model_name = model_string.split('(')[0]
+
+        return model_name
+
     def _get_model_params_array(self, model_string):
         """docstring here
         Arguments:
@@ -75,22 +93,21 @@ class MAD:
         Returns:
             {list} a list of the model instance parameters
         """
-        model_name = model_string.split('(')[0]
+        model_name = self._get_model_name(model_string)
         model_params_array = model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
 
         return model_params_array
 
     def get_model_info(self, mod):
         """Simple class method to return a formatted string of model information.
-        
         Arguments:
-            :param mod: {class instance} -- argument passed from __init__ method.
-
+            :param mod: {class instance} -- argument passed from __init__ method
         Returns:
             {str} the model with non default parameters in use
         """
         # get the model string and parameters
         model_string = self._get_model_string(mod)
+        model_name   = self._get_model_name(model_string)
         model_params = self._get_model_params_array(model_string)
         
         # get the params used in the default instance of the model
@@ -104,7 +121,10 @@ class MAD:
 
         # get the list of non default parameters and create a model string with non default parameters
         non_default_model_params = [x for x in model_params if x not in default_model_params]
-        log_model_string = model_string.split('(')[0] + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
+        if len(non_default_model_params) == 0:
+            log_model_string = model_name + "()"    
+        else:
+            log_model_string = model_name + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
 
         return '# Model and parameters:\n\t' + log_model_string + '\n'
 

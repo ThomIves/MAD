@@ -9,9 +9,11 @@ from ToolKit import MAD
 ###############################################################################
 ### Model info section
 
-model = LinearRegression(normalize=True)
+model = LinearRegression(normalize=True,copy_X=False)
 
-Notes = """These are my different extra important notes.
-These have a carriage return in them too!!!"""
+Notes = """In this run, I decided to not log the:
+    python version, 
+    the pip requirements, and
+    the imports"""
 
-MAD(model, extra_notes=Notes) #, locals=locals())
+MAD(model, extra_notes=Notes) #, py_version=False, pip_requirements=False, imports=False, capture_notes=False)

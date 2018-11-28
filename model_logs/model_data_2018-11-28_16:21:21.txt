@@ -1,14 +1,7 @@
 # Model and parameters:
 	LinearRegression(
+		copy_X=False
 		normalize=True)
-
-# python version:
-3.5.2 (default, Nov 23 2017, 16:37:01) 
-
-# pip requirements:
-numpy==1.15.2
-pandas==0.23.4
-sklearn==0.0
 
 # Necessary Imports:
 import sys
@@ -19,5 +12,4 @@ import pandas as pd
 from ToolKit import MAD
 
 # Extra Notes:
-These are my different extra important notes.
-These have a carriage return in them too!!!
+In this run, I decided to not log the python version AND the pip requirements
