@@ -45,5 +45,3 @@ This work came from https://github.com/ThomIves/MAD originally.
 ## Licensing
 
 "The code in this project is licensed under MIT license."
-
-
