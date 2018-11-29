@@ -8,15 +8,16 @@ from datetime import datetime
 
 
 class MAD:
-    """ "Model and Dependencies" - capture machine learning settings and dependencies:
+    """ "Model and Dependencies" - capture machine learning model 
+            settings and dependencies:
 
         0) Create a model_logs directory if it does not exist, and 
             save log files with a time stamp (or not) to that directory.
-        1) Document the machine learning model name and it's parameters.
+        1) Document the machine learning model name and it's non-default parameters.
         2) Document the version of python in use.
         3) Document the pip requirements.
         4) Document the necessary imports.
-        5) Document any other important notes not covered above (or not), 
+        5) Document any other important notes not covered above, 
             such as how missing values were filled, etc.
     """
 
@@ -29,18 +30,23 @@ class MAD:
         The if block adds a time stamp to the default, or provided, file_name.
         The next if block adds a model logs directory IF it does not yet exist.
         The file open to write context manager then creates a time stamped file,
-            if add_time_step is true, and adds a documentation section captured from each method.
+            if add_time_step is true, and adds a documentation section captured 
+            from each method.
 
         Arguments:
             mod {class instance} --  instance of machine learning class
         
         Keyword Arguments:
-            file_name {str} -- the filename used for the log file (default: {'model_data.txt'})
-            extra_notes {str} -- optional notes providing mode detail (default: {''})
-            add_time_stamp {bool} -- boolean to add timp stamp to model file or not (default: {True})
-            WTL {kwargs} -- What To Log (WTL) are key word arguments for what to log. The default is to log everything.
-                Pass any py_version=False, pip_requirements=False, imports=False, and/or capture_notes=False to
-                    NOT log one or more of these.
+            file_name {str} -- the filename used for the log file 
+                (default: {'model_data.txt'})
+            extra_notes {str} -- optional notes providing mode detail 
+                (default: {''})
+            add_time_stamp {bool} -- boolean to add timp stamp to model file or not 
+                (default: {True})
+            WTL {kwargs} -- What To Log (WTL) are key word arguments for what to log. 
+                The default is to log everything. Pass any py_version=False, 
+                pip_requirements=False, imports=False, and/or capture_notes=False 
+                to NOT log one or more of these.
         """
         self.calling_file = __main__.__file__
         self.locals = inspect.currentframe().f_back.f_locals
@@ -94,7 +100,8 @@ class MAD:
             {list} a list of the model instance parameters
         """
         model_name = self._get_model_name(model_string)
-        model_params_array = model_string.replace(model_name,'').replace('(','').replace(')','').split(',')
+        model_params_array = model_string.replace(
+            model_name,'').replace('(','').replace(')','').split(',')
 
         return model_params_array
 
@@ -111,20 +118,25 @@ class MAD:
         model_params = self._get_model_params_array(model_string)
         
         # get the params used in the default instance of the model
-        default_imports_array  = [x for x in self._get_imports_array() if model_name in x]
+        default_imports_array  = [
+            x for x in self._get_imports_array() if model_name in x]
         default_imports_string = "\n".join(default_imports_array)
-        default_exec_command   = default_imports_string + ";" + "mod_default=" + model_name + "()"
+        default_exec_command   = default_imports_string + ";" + "mod_default=" \
+            + model_name + "()"
         exec(default_exec_command, globals(), locals())
         # get the default model string and parameters
         default_model_string = self._get_model_string(locals()['mod_default'])
         default_model_params = self._get_model_params_array(default_model_string)
 
-        # get the list of non default parameters and create a model string with non default parameters
-        non_default_model_params = [x for x in model_params if x not in default_model_params]
+        # get the list of non default parameters and create a model string 
+        #     with non default parameters
+        non_default_model_params = [
+            x for x in model_params if x not in default_model_params]
         if len(non_default_model_params) == 0:
             log_model_string = model_name + "()"    
         else:
-            log_model_string = model_name + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
+            log_model_string = model_name \
+                + "(\n\t\t" + "\n\t\t".join(non_default_model_params) + ")"
 
         return '# Model and parameters:\n\t' + log_model_string + '\n'
 
