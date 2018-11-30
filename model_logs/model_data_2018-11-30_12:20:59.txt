@@ -1,0 +1,14 @@
+# Model and parameters:
+	LinearRegression(
+		copy_X=False
+		normalize=True)
+
+# pip requirements:
+sklearn==0.0
+
+# Necessary Imports:
+from sklearn.linear_model import LinearRegression
+
+# Extra Notes:
+Logging the model with TWO non-default parameter and logging all aspects.
+Removed the py_version logging this time.

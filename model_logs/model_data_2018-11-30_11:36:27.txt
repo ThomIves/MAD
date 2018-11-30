@@ -1,21 +1,14 @@
 # Model and parameters:
-	LinearRegression(
-		normalize=True)
+	LinearRegression()
 
 # python version:
 3.5.2 (default, Nov 23 2017, 16:37:01) 
 
 # pip requirements:
-numpy==1.15.2
-pandas==0.23.4
 sklearn==0.0
 
 # Necessary Imports:
-import sys
-import sklearn
 from sklearn.linear_model import LinearRegression
-import numpy as np
-import pandas as pd
 
 # Extra Notes:
-This run uses a non-default parameter of normalize = True
+Logging the default and logging all aspects.

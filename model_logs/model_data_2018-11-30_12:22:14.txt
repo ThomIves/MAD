@@ -1,0 +1,8 @@
+# Model and parameters:
+	LinearRegression(
+		copy_X=False
+		normalize=True)
+
+# Extra Notes:
+Logging the model with TWO non-default parameter and logging all aspects.
+Removed the py_version, pip_requirements and imports logging this time.

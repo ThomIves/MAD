@@ -2,7 +2,6 @@ import os
 import os.path
 import sys
 import inspect
-import pandas as pd
 import __main__
 from datetime import datetime
 
@@ -148,44 +147,38 @@ class MAD:
     def get_pip_requirements(self):
         """Class method to capture pip requirements for the script.
         
-        The first code block creates a pandas dataframe from modules used by the 
-            script instantiating this class. 
+        The first code block creates a string out of the local items. 
         The second block does a pip version flexible import of freeze to capture 
             modules loaded by pip.
-        The third block obtains all pip installs and puts them in a data frame.
-        The fourth block inner merges the two data frames to get a list of only 
-            those pip modules needed by the script instantiating this class.
-        The fifth block formats the previous list of pip modules into a string.
-
+        The third block obtains all pip installs that appear in local items also
+            and puts them in a data frame.
+        The fourth block formats a requirements.txt style string of required
+            pip modules needed by the script instantiating this class.
         
         Returns:
             {str} -- a formatted list of modules needing pip installation for the 
                         model to work.
         """
-        local_modules_list = list(
-            filter(lambda x: inspect.ismodule(x[1]), self.locals.items()))
-        mod_list = []
-        for row in local_modules_list:
-            mod_list.append([str(row[1]).split()[1].strip("'"), row[0]])
-        df_mods = pd.DataFrame(mod_list, columns=['Mod', 'Alias'])
+        # First Section
+        local_modules_string = str(self.locals.items())
 
+        # Second Section
         try:
             from pip._internal.operations import freeze
         except ImportError:  # pip < 10.0
             from pip.operations import freeze
 
+        # Third Section
         x = freeze.freeze()
         pip_list = []
         for p in x:
             line = p.split('==')
-            pip_list.append(line)
-        df_pip = pd.DataFrame(pip_list, columns=['Mod', 'Version'])
+            if line[0] in local_modules_string:
+                pip_list.append(line)
 
-        df = df_pip.merge(df_mods, how='inner', on=['Mod'])
-        df = df.values.tolist()
-
+        # Fourth Section
         pip_rqmts = '\n# pip requirements:\n'
-        for row in df:
+        for row in pip_list:
             line_string = row[0] + '==' + row[1] + '\n'
             pip_rqmts += line_string
 
@@ -216,8 +209,10 @@ class MAD:
             {str} -- a formatted list of imports from the script of 
                         code block one.
         """
+        # First Section
         imprt_lines = self._get_imports_array()
 
+        # Second Section
         imports_string = '\n# Necessary Imports:\n'
         for line in imprt_lines:
             imports_string += line + '\n'
