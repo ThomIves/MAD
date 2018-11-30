@@ -198,7 +198,7 @@ class MAD:
             FLA = f.readlines()
             imprt_lines = [line.rstrip('\n') for line in FLA if (
                 ('import ' in line) and
-                ('#' != line[0]))]
+                ('#' != line[0]) and ('MAD' not in line))]
 
         return imprt_lines
         
