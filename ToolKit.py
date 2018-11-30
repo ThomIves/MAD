@@ -47,6 +47,7 @@ class MAD:
                 pip_requirements=False, imports=False, and/or capture_notes=False 
                 to NOT log one or more of these.
         """
+        # Section A.1
         self.calling_file = __main__.__file__
         self.locals = inspect.currentframe().f_back.f_locals
         if add_time_stamp == True:
@@ -54,9 +55,11 @@ class MAD:
             file_name = file_name.replace(
                 file_name[-4:], '_' + time_date + file_name[-4:])
 
+        # Section A.2
         if not os.path.exists('model_logs'):
             os.makedirs('model_logs')
 
+        # Section A.3
         with open('./model_logs/' + file_name, 'w') as self.out_file:
             self.out_file.write(self.get_model_info(mod))
             if (('py_version' not in WTL) or (WTL['py_version'] == True)): 
@@ -111,23 +114,27 @@ class MAD:
         Returns:
             {str} the model with non default parameters in use
         """
-        # get the model string and parameters
+        # Section B.1: get the model string and parameters
         model_string = self._get_model_string(mod)
+        if 'Pipeline' in model_string:
+            model_string = model_string.replace(',',',\n\t\t')
+            return '# Model and parameters:\n\t' + model_string + '\n'
+
         model_name   = self._get_model_name(model_string)
         model_params = self._get_model_params_array(model_string)
         
-        # get the params used in the default instance of the model
+        # Section B.2a: get the params used in the default instance of the model
         default_imports_array  = [
             x for x in self._get_imports_array() if model_name in x]
         default_imports_string = "\n".join(default_imports_array)
         default_exec_command   = default_imports_string + ";" + "mod_default=" \
             + model_name + "()"
         exec(default_exec_command, globals(), locals())
-        # get the default model string and parameters
+        # Section B.2b: get the default model string and parameters
         default_model_string = self._get_model_string(locals()['mod_default'])
         default_model_params = self._get_model_params_array(default_model_string)
 
-        # get the list of non default parameters and create a model string 
+        # Section B.3: get the list of non default parameters and create a model string 
         #     with non default parameters
         non_default_model_params = [
             x for x in model_params if x not in default_model_params]
@@ -159,16 +166,16 @@ class MAD:
             {str} -- a formatted list of modules needing pip installation for the 
                         model to work.
         """
-        # First Section
-        local_modules_string = str(self.locals.items())
+        # Section C.1
+        local_modules_string = str(self.locconvals.items())
 
-        # Second Section
+        # Section C.2
         try:
             from pip._internal.operations import freeze
         except ImportError:  # pip < 10.0
             from pip.operations import freeze
 
-        # Third Section
+        # Section C.3
         x = freeze.freeze()
         pip_list = []
         for p in x:
@@ -176,7 +183,7 @@ class MAD:
             if line[0] in local_modules_string:
                 pip_list.append(line)
 
-        # Fourth Section
+        # Section C.4
         pip_rqmts = '\n# pip requirements:\n'
         for row in pip_list:
             line_string = row[0] + '==' + row[1] + '\n'
@@ -209,10 +216,10 @@ class MAD:
             {str} -- a formatted list of imports from the script of 
                         code block one.
         """
-        # First Section
+        # Section D.1
         imprt_lines = self._get_imports_array()
 
-        # Second Section
+        # Section D.2
         imports_string = '\n# Necessary Imports:\n'
         for line in imprt_lines:
             imports_string += line + '\n'
