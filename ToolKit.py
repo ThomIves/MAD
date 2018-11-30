@@ -167,7 +167,7 @@ class MAD:
                         model to work.
         """
         # Section C.1
-        local_modules_string = str(self.locconvals.items())
+        local_modules_string = str(self.locals.items())
 
         # Section C.2
         try:
