@@ -1,7 +1,7 @@
 ![MaShell Logo](https://github.com/ThomIves/MAD/blob/master/MAD_logo.png)
 
 # MAD
-> "Model and Dependencies" - capture machine learning settings and dependencies
+> Hi Mike "Model and Dependencies" - capture machine learning settings and dependencies
 
 I love doing machine learning competitions, but I get "MAD" at myself when I allow my model settings and results to get mixed up. I try hard to avoid this, but it still happens, because I can be an idiot. This python module is a way to avoid these (my) issues. Another script is forthcoming that can prepend competition results to the log file names created by this script. 
 
